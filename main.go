@@ -29,14 +29,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+
 	b.Handle("/help", func(m *tb.Message) {
-		b.Send(m.Sender, "To Say Hello use /hello \n To pick your time of the day use /pick_time\n")
+		b.Notify(m.Sender, tb.Typing)
+		b.Send(m.Sender, "To Say Hello use /hello \nTo pick your time of the day use /pick_time\n")
 	})
 
 	b.Handle("/hello", func(m *tb.Message) {
 		b.Send(m.Sender, "You entered "+m.Text)
 	})
-
+	
 	moonBtn := tb.InlineButton{
 		Unique: "moon",
 		Text:   "Moon 🌚",
@@ -68,6 +70,7 @@ func main() {
 	}
 
 	b.Handle("/pick_time", func(m *tb.Message) {
+		b.Notify(m.Sender, tb.Typing)
 		b.Send(
 			m.Sender,
 			"Pick your time of the day",
