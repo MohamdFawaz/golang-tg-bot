@@ -29,21 +29,25 @@ func main() {
 		log.Fatal(err)
 	}
 
+	b.Handle("/help", func(m *tb.Message) {
+		b.Send(m.Sender, "To Say Hello use /hello \n To pick your time of the day use /pick_time\n")
+	})
+
 	b.Handle("/hello", func(m *tb.Message) {
 		b.Send(m.Sender, "You entered "+m.Text)
 	})
 
-	inlineBtn1 := tb.InlineButton{
+	moonBtn := tb.InlineButton{
 		Unique: "moon",
 		Text:   "Moon 🌚",
 	}
 
-	inlineBtn2 := tb.InlineButton{
+	sunBtn := tb.InlineButton{
 		Unique: "sun",
 		Text:   "Sun 🌞",
 	}
 
-	b.Handle(&inlineBtn1, func(c *tb.Callback) {
+	b.Handle(&moonBtn, func(c *tb.Callback) {
 		// Required for proper work
 		b.Respond(c, &tb.CallbackResponse{
 			ShowAlert: false,
@@ -52,7 +56,7 @@ func main() {
 		b.Send(c.Sender, "Moon says 'Hi'!")
 	})
 
-	b.Handle(&inlineBtn2, func(c *tb.Callback) {
+	b.Handle(&sunBtn, func(c *tb.Callback) {
 		b.Respond(c, &tb.CallbackResponse{
 			ShowAlert: false,
 		})
@@ -60,13 +64,13 @@ func main() {
 	})
 
 	inlineKeys := [][]tb.InlineButton{
-		[]tb.InlineButton{inlineBtn1, inlineBtn2},
+		[]tb.InlineButton{sunBtn, moonBtn},
 	}
 
 	b.Handle("/pick_time", func(m *tb.Message) {
 		b.Send(
 			m.Sender,
-			"Day or night, you choose",
+			"Pick your time of the day",
 			&tb.ReplyMarkup{InlineKeyboard: inlineKeys})
 	})
 
